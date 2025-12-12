@@ -1,62 +1,38 @@
-"""
-NeurASP Sorting Demo
-
-Demonstrates the use of NeurASP for learning to sort a list of 5 integers.
-"""
-
+"""NeurASP Sorting Demo."""
 from __future__ import annotations
 
 import random
+from typing import Final
+
+DEMO_EPOCHS: Final[int] = 50
+TEST_SAMPLES: Final[int] = 5
+VALUE_RANGE: Final[tuple[int, int]] = (1, 100)
 
 
 def main() -> None:
-    """Run the sorting demonstration."""
     from neurasp import NeurASPSorter
-    from neurasp.core import SortingConfig
-    
+    from neurasp.core.types import SortingConfig
+
     print("=" * 60)
     print("NeurASP Sorting Demo - Team EU")
-    print("Task: Learning to sort a list of 5 integers")
     print("=" * 60)
     print()
-    
-    # Initialize the sorter
-    config = SortingConfig(
-        list_size=5,
-        hidden_dim=64,
-        learning_rate=0.001
-    )
+
+    config = SortingConfig(list_size=5, hidden_dim=64, learning_rate=0.001)
     sorter = NeurASPSorter(config)
-    
-    print("Training the neural-symbolic sorter...")
-    print("-" * 40)
-    
-    # Train
-    losses = sorter.train(epochs=50, verbose=True)
-    
-    print()
-    print("-" * 40)
-    print("Training complete!")
-    print(f"Final loss: {losses[-1]:.4f}")
-    print()
-    
-    # Test on random examples
-    print("Testing on random examples:")
-    print("-" * 40)
-    
-    for i in range(5):
-        test_input = random.sample(range(1, 100), 5)
-        expected = sorted(test_input)
+
+    print("Training...")
+    results = sorter.train(epochs=DEMO_EPOCHS, verbose=True)
+    print(f"\nFinal loss: {results[-1][0]:.4f}\n")
+
+    print("Testing:")
+    for _ in range(TEST_SAMPLES):
+        test_input = random.sample(range(*VALUE_RANGE), 5)
         result = sorter.sort(test_input)
-        
-        status = "✓" if result == expected else "✗"
-        print(f"  Input:    {test_input}")
-        print(f"  Output:   {result}")
-        print(f"  Expected: {expected}  {status}")
-        print()
-    
-    print("=" * 60)
-    print("Demo complete!")
+        status = "✓" if result.state == "SAT" else "✗"
+        print(f"  {list(result.input_list)} -> {list(result.sorted_list)} {status}")
+
+    print("\nDone!")
 
 
 if __name__ == "__main__":

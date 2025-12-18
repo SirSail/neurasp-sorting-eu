@@ -1,0 +1,3 @@
+[submodule "vendor/NeurASP"]
+	path = vendor/NeurASP
+	url = https://github.com/azreasoners/NeurASP

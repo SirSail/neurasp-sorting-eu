@@ -39,7 +39,7 @@ def prepare_neurasp_data(X, Y):
         # val(Index, Value).
         obs = ""
         for idx, v in enumerate(vals):
-            obs += f"val({idx}, {v.item()}). "
+            obs += f"val({idx+1}, {v.item()}). "
         obs_list.append(obs)
         
     return data_list, obs_list

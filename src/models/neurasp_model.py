@@ -29,7 +29,7 @@ class SymbolicSorter:
         nn(neural_pos(5, vals), (0,1,2,3,4)).
         
         % Mapping
-        position(I, P) :- neural_pos(I, vals, P).
+        pos(I+1, P) :- neural_pos(I, vals, P).
         
         """ + base_asp
         
